@@ -9,7 +9,7 @@ class MealService
 {
     private $mealRepository;
 
-    //Inject MealRepository into MealService
+    // Inject MealRepository into MealService
     public function __construct(MealRepository $mealRepository)
     {
         $this->mealRepository = $mealRepository;

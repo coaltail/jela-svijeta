@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('meal_id');
             $table->foreignId('tag_id');
-            // Add any additional columns if needed
             $table->timestamps();
 
             $table->foreign('meal_id')->references('id')->on('meals')->onDelete('cascade');
