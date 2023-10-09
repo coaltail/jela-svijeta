@@ -1,6 +1,6 @@
 # Jela svijeta
 
-"Jela svijeta" je aplikacija omogućava pregled i filtriranje različitih jela. Aplikacija je višejezična i omogućava unos i upravljanje jelima, sastojcima, kategorijama i tagovima.
+"Jela svijeta" je aplikacija omogućava pregled i filtriranje različitih jela. Aplikacija je višejezična i omogućava pregled jela, sastojaka, kategorija i tagova.
 
 ## Tehnologije
 
