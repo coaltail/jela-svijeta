@@ -8,6 +8,7 @@ use App\Models\Meal;
 use App\Services\MealService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Validator;
 
 class MealController extends Controller
@@ -43,6 +44,27 @@ class MealController extends Controller
         // Call MealService to get meals
         $meals = $this->mealService->getMeals($perPage, $tags, $lang, $with, $diffTime, $page, $category);
 
-        return $meals;
+        return $this->formatPaginationResponse($meals);
+    }
+
+    // Resource is returned in the getMeals function from the mealService, hence the argument is of type AnonymousResourceCollection
+    protected function formatPaginationResponse(AnonymousResourceCollection $resource)
+    {
+        $data = [
+            'meta' => [
+                'currentPage' => $resource->currentPage(),
+                'totalItems' => $resource->total(),
+                'itemsPerPage' => $resource->perPage(),
+                'totalPages' => $resource->lastPage()
+            ],
+            'data' => $resource->items(),
+            'links' => [
+                'prev' => $resource->previousPageUrl(),
+                'next' => $resource->nextPageUrl(),
+                'self' => $resource->url($resource->currentPage()),
+            ],
+        ];
+
+        return $data;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Http\Resources\MealResource;
 use App\Models\Meal;
+use Carbon\Carbon;
 
 class MealRepository
 {
@@ -31,17 +32,21 @@ class MealRepository
         }
 
         if ($diffTime > 0) {
-            $query->where(function ($query) use ($diffTime) {
-                $query->where('created_at', '>', now()->subSeconds($diffTime))
-                    ->orWhere('updated_at', '>', now()->subSeconds($diffTime))
-                    ->orWhere('deleted_at', '>', now()->subSeconds($diffTime));
+            //Include soft deleted meals
+            $query->withTrashed();
+            $date = date('Y-m-d H:i:s', $diffTime);
+            $query->where(function ($query) use ($date) {
+                $query->where('created_at', '>', $date)
+                    ->orWhere('updated_at', '>', $date)
+                    ->orWhere('deleted_at', '>', $date);
             });
         }
         if (!empty($with)) {
             $with = explode(',', $with);
             $query = $query->with($with);
         }
-        $result = $query->simplePaginate($perPage, ['*'], 'page', $page);
+
+        $result = $query->paginate($perPage, ['*'], 'page', $page);
 
         // Transform the result into a MealResource collection
         $resource = MealResource::collection($result);

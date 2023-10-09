@@ -45,5 +45,12 @@ class CategorySeeder extends Seeder
             // Randomly select tags and attach them to the meal
             $meal->tags()->attach($tags->random(2)->pluck('id'));
         });
+
+        // Soft delete some meals (change the number as needed)
+        $mealsToDelete = Meal::inRandomOrder()->take(5)->get();
+
+        foreach ($mealsToDelete as $meal) {
+            $meal->delete();
+        }
     }
 }
